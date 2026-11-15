@@ -12,10 +12,18 @@ test('customer can complete a coffee purchase', async ({
   await homePage.addProduct(checkoutData.product);
 
   // Handle promo popup if it appears
-  const promoPopup = page.getByRole('button', { name: 'Yes' });
+  const acceptPromo = page.getByRole('button', {
+    name: 'Yes, of course!',
+  });
 
-  if (await promoPopup.isVisible().catch(() => false)) {
-    await promoPopup.click();
+  const skipPromo = page.getByRole('button', {
+    name: "Nah, I'll skip.",
+  });
+
+  if (await acceptPromo.isVisible().catch(() => false)) {
+    await acceptPromo.click();
+  } else if (await skipPromo.isVisible().catch(() => false)) {
+    await skipPromo.click();
   }
 
   // Proceed to checkout
