@@ -1,6 +1,7 @@
 import { test, expect } from '../fixtures/test-fixtures';
 import { checkoutData } from '../test-data/checkout-data';
 
+// Main checkout test
 test('customer can complete a coffee purchase', async ({
   page,
   homePage,
@@ -41,4 +42,22 @@ test('customer can complete a coffee purchase', async ({
   // Verify successful checkout
   await expect(homePage.cartLink).toContainText('(0)');
   await expect(homePage.checkoutButton).toContainText('$0.00');
+});
+
+// Double-click translation bonus test
+test('double-clicking a coffee title translates it into Chinese', async ({
+  page,
+  homePage,
+}) => {
+  await homePage.goto();
+
+  const espressoTitle = page
+    .locator('li')
+    .filter({ has: page.locator('[data-test="Espresso"]') })
+    .locator('h4');
+
+  await homePage.doubleClickProductTitle('Espresso');
+
+  // Verify that the original title has changed
+  await expect(espressoTitle).not.toHaveText('Espresso');
 });

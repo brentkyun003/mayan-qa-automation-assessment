@@ -19,6 +19,16 @@ export class HomePage {
     await this.page.locator(`[data-test="${productName}"]`).click();
   }
 
+  async doubleClickProductTitle(productName: string) {
+    const product = this.page
+      .locator('li')
+      .filter({
+        has: this.page.locator(`[data-test="${productName}"]`),
+      });
+
+    await product.locator('h4').dblclick();
+  }
+
   async checkout() {
     await this.checkoutButton.click();
   }
