@@ -29,6 +29,13 @@ export class HomePage {
     await product.locator('h4').dblclick();
   }
 
+  // Right-click coffee icon
+  async rightClickCoffeeIcon(productName: string) {
+    await this.page
+      .locator(`[data-test="${productName}"]`)
+      .click({ button: 'right' });
+  }
+
   async checkout() {
     await this.checkoutButton.click();
   }
