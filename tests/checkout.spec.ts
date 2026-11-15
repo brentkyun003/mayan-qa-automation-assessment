@@ -1,3 +1,4 @@
+
 import { test, expect } from '../fixtures/test-fixtures';
 import { checkoutData } from '../test-data/checkout-data';
 
@@ -58,6 +59,40 @@ test('double-clicking a coffee title translates it into Chinese', async ({
 
   await homePage.doubleClickProductTitle('Espresso');
 
-  // Verify that the original title has changed
   await expect(espressoTitle).not.toHaveText('Espresso');
+});
+
+// Right-click coffee icon bonus test
+test('right-clicking a coffee icon opens the add-to-cart dialog', async ({
+  page,
+  homePage,
+}) => {
+  await homePage.goto();
+
+  await homePage.rightClickCoffeeIcon('Espresso');
+
+  const dialog = page.getByRole('dialog');
+
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText('Add Espresso to the cart?');
+  await expect(dialog.getByRole('button', { name: 'Yes' })).toBeVisible();
+  await expect(dialog.getByRole('button', { name: 'No' })).toBeVisible();
+});
+
+// Promo popup bonus test
+test('promo popup appears after adding three cart items', async ({
+  page,
+  homePage,
+}) => {
+  await homePage.goto();
+
+  await homePage.addProduct('Espresso');
+  await homePage.addProduct('Cappuccino');
+  await homePage.addProduct('Mocha');
+
+  const promoPopup = page.getByRole('button', {
+    name: 'Yes, of course!',
+  });
+
+  await expect(promoPopup).toBeVisible();
 });
